@@ -2,3 +2,16 @@ not ( true and false ) ;
 not ( true and true) ;
 true;
 not ( true and false ) 
+true ;
+not false ;
+true and false ;
+false or true ;
+true or false and not true ;
+not ( true and false ) ;
+( true or false ) and ( false or true ) ;
+
+true and false
+not ( true or false ;
+true and or false ;
+or true ;
+true false ;

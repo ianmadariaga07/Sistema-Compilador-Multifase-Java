@@ -1,0 +1,31 @@
+package fes.aragon.modelo;
+import fes.aragon.token.TokensBooleanoAPrima;
+
+%%
+%class LexicoBooleanoAPrima
+%public
+%line
+%column
+%type TokensBooleanoAPrima
+
+espacio=[ \t\r\n]+
+
+%{
+    public String lexema;
+    public int getYyline(){ return yyline+1; }
+    public int getYycolumn(){ return yycolumn+1; }
+%}
+
+%%
+{espacio} {/* Ignorar */}
+
+"or"        { lexema=yytext(); return TokensBooleanoAPrima.OR; }
+"and"       { lexema=yytext(); return TokensBooleanoAPrima.AND; }
+"not"       { lexema=yytext(); return TokensBooleanoAPrima.NOT; }
+"true"      { lexema=yytext(); return TokensBooleanoAPrima.TRUE; }
+"false"     { lexema=yytext(); return TokensBooleanoAPrima.FALSE; }
+"("         { lexema=yytext(); return TokensBooleanoAPrima.AB_PAR; }
+")"         { lexema=yytext(); return TokensBooleanoAPrima.CE_PAR; }
+";"         { lexema=yytext(); return TokensBooleanoAPrima.PUNTOYCOMA; }
+
+.           { lexema=yytext(); return TokensBooleanoAPrima.ERROR; }

@@ -49,7 +49,6 @@ public class SintacticoOperaciones {
         } while (token != TokensOperaciones.EOF);
     }
 
-    // Función expresion() de la diapositiva 3
     private void expresion() throws IOException {
         exprSimple();
         if (token == TokensOperaciones.IGUAL || token == TokensOperaciones.DIST || token == TokensOperaciones.ME ||
@@ -59,7 +58,6 @@ public class SintacticoOperaciones {
         }
     }
 
-    // Función exprSimple() de la diapositiva 5
     private void exprSimple() throws IOException {
         if (token == TokensOperaciones.MAS || token == TokensOperaciones.MENOS) {
             get_token();
@@ -71,7 +69,6 @@ public class SintacticoOperaciones {
         }
     }
 
-    // Función termino() de la diapositiva 7
     private void termino() throws IOException {
         factor();
         while (token == TokensOperaciones.POR || token == TokensOperaciones.DIV ||
@@ -81,7 +78,6 @@ public class SintacticoOperaciones {
         }
     }
 
-    // Función factor() de la diapositiva 9
     private void factor() throws IOException {
         switch (token) {
             case ID:
@@ -103,7 +99,7 @@ public class SintacticoOperaciones {
                 break;
             default:
                 error("Expresión no válida (se esperaba ID, NUM, NOT o '(' )");
-                get_token(); // Para no ciclarse
+                get_token();
                 break;
         }
     }

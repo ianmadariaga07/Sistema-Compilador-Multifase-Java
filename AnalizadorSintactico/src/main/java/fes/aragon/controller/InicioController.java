@@ -16,8 +16,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -45,7 +43,6 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<TokenModelo, Integer> colColumna;
 
     private File archivoAbierto;
-    private final Map<String, String[]> infoAutomatas = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,10 +54,6 @@ public class InicioController implements Initializable {
         colColumna.setCellValueFactory(new PropertyValueFactory<>("columna"));
 
         tablaTokens.setVisible(false);
-
-        infoAutomatas.put("1. MIKE#", new String[]{"Analizador Léxico Mike#", "Desglosa el código fuente en tokens."});
-        infoAutomatas.put("2. BOOLEAN", new String[]{"Analizador Sintactico Booleano", ""});
-        infoAutomatas.put("3. OPERACIONES", new String[]{"Analizador Sintactico de Operaciones", ""});
     }
 
 
@@ -95,6 +88,19 @@ public class InicioController implements Initializable {
                 case "3. OPERACIONES":
                     prepararInterfazParaTexto();
                     procesarLineasOperaciones(texto);
+                    break;
+                case "4. BOOLEAN APRIMA":
+                    prepararInterfazParaTexto();
+                    procesarLineasBooleanasAPrima(texto);
+                    break;
+                case "5. ASDP":
+                    prepararInterfazParaTexto();
+                    procesarLineasASDP(texto);
+                    break;
+                case "6. BOOLEAN CUP":
+                    prepararInterfazParaTexto();
+                    procesarLineasBooleanasCup(texto);
+                    break;
                 default:
                     mostrarAlerta("Aviso", "Programa en construcción...");
                     break;
@@ -182,6 +188,95 @@ public class InicioController implements Initializable {
         }
         txtAreaResultado.setText(resultados.toString());
     }
+
+    private String sintacticoBooleanAPrima(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoBooleanoAPrima lexicoBool = new LexicoBooleanoAPrima(rd);
+        SintacticoBooleanoAPrima sintactico = new SintacticoBooleanoAPrima(lexicoBool);
+
+        return sintactico.analizar();
+    }
+
+    private void procesarLineasBooleanasAPrima(String texto) {
+        String[] lineas = texto.split("\\r?\\n");
+        StringBuilder resultados = new StringBuilder();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                try {
+                    String veredicto = sintacticoBooleanAPrima(linea);
+                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                } catch (Exception e) {
+                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                }
+            }
+        }
+        txtAreaResultado.setText(resultados.toString());
+    }
+
+
+
+
+
+
+
+    private String sintacticoASDP(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoBooleanoAPrima lexicoBool = new LexicoBooleanoAPrima(rd);
+        SintacticoBooleanoAPrima sintactico = new SintacticoBooleanoAPrima(lexicoBool);
+
+        return sintactico.analizar();
+    }
+
+    private void procesarLineasASDP(String texto) {
+        String[] lineas = texto.split("\\r?\\n");
+        StringBuilder resultados = new StringBuilder();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                try {
+                    String veredicto = sintacticoASDP(linea);
+                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                } catch (Exception e) {
+                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                }
+            }
+        }
+        txtAreaResultado.setText(resultados.toString());
+    }
+
+
+
+
+
+
+
+
+    private String sintacticoBooleanCup(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoBooleanoCup lexicoBool = new LexicoBooleanoCup(rd);
+        SintacticoBooleanoCup sintactico = new SintacticoBooleanoCup(lexicoBool);
+
+        return sintactico.analizar();
+    }
+
+    private void procesarLineasBooleanasCup(String texto) {
+        String[] lineas = texto.split("\\r?\\n");
+        StringBuilder resultados = new StringBuilder();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                try {
+                    String veredicto = sintacticoBooleanCup(linea);
+                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                } catch (Exception e) {
+                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                }
+            }
+        }
+        txtAreaResultado.setText(resultados.toString());
+    }
+
 
     @FXML
     void accionAbrirArchivo(ActionEvent event){

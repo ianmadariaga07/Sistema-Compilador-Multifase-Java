@@ -51,7 +51,7 @@
                </font>
             </Label>
             <Label fx:id="lblNota1" layoutX="14.0" layoutY="61.0" prefHeight="18.0" prefWidth="575.0" style="-fx-text-fill: #A1A6BA;" text="NOTA: Si el área de entrada está vacía, la validación no se ejecutará." />
-            <ToggleButton layoutX="141.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="2. BOOLEAN">
+            <ToggleButton layoutX="172.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="152.0" stylesheets="@../css/style.css" text="2. BOOLEAN">
                <font>
                   <Font size="14.0" />
                </font>
@@ -59,27 +59,27 @@
                   <ToggleGroup fx:id="grupoAFD" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton layoutX="9.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="1. MIKE#" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="9.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="151.0" stylesheets="@../css/style.css" text="1. MIKE#" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>
             </ToggleButton>
-            <ToggleButton layoutX="540.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="4. CEROS v3" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="667.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="167.0" stylesheets="@../css/style.css" text="5. ASDP" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>
             </ToggleButton>
-            <ToggleButton layoutX="274.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="3. OPERACIONES" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="333.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="154.0" stylesheets="@../css/style.css" text="3. OPERACIONES" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>
             </ToggleButton>
-            <ToggleButton layoutX="406.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="3. ID v3" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="501.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="156.0" stylesheets="@../css/style.css" text="4. BOOLEAN APRIMA" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>
             </ToggleButton>
-            <ToggleButton layoutX="673.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="5. EXP REG" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="850.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="168.0" stylesheets="@../css/style.css" text="6. BOOLEAN CUP" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>
@@ -89,16 +89,6 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <ToggleButton layoutX="805.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="6. NOTA CIENT" toggleGroup="$grupoAFD">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </ToggleButton>
-            <ToggleButton layoutX="936.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="7. AB AUTO" toggleGroup="$grupoAFD">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </ToggleButton>
             <Label fx:id="lblNota11" layoutX="9.0" layoutY="111.0" prefHeight="21.0" prefWidth="731.0" style="-fx-text-fill: #A1A6BA;" text="NOTA: Exiten archivos txt para probar cada automatas, estos se encuentran en la siguiente ruta:">
                <font>
                   <Font size="15.0" />
