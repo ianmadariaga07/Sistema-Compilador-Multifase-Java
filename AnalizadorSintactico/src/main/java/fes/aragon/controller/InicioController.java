@@ -45,7 +45,6 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<TokenModelo, Integer> colColumna;
 
     private File archivoAbierto;
-    private AutomataConfigurable automataConfigurable = new AutomataConfigurable();
     private final Map<String, String[]> infoAutomatas = new HashMap<>();
 
     @Override
@@ -60,63 +59,53 @@ public class InicioController implements Initializable {
         tablaTokens.setVisible(false);
 
         infoAutomatas.put("1. MIKE#", new String[]{"Analizador Léxico Mike#", "Desglosa el código fuente en tokens."});
+        infoAutomatas.put("2. BOOLEAN", new String[]{"Analizador Sintactico Booleano", ""});
     }
 
+
     @FXML
-    void accionIdentificador(ActionEvent event){
+    void accionIdentificador(ActionEvent event) {
         String texto = txtAreaContenido.getText();
         Toggle toggle = grupoAFD.getSelectedToggle();
 
-        if(texto == null || texto.trim().isEmpty()){
+        if (texto == null || texto.trim().isEmpty()) {
             mostrarAlerta("Aviso", "No hay texto para validar. Escribe algo o carga un archivo");
             return;
         }
 
-        if(toggle == null){
-            mostrarAlerta("Aviso", "Debes seleccionar un tipo de autómata (AFD) antes de validar");
+        if (toggle == null) {
+            mostrarAlerta("Aviso", "Debes seleccionar un tipo de analizador antes de validar");
             return;
         }
 
-        ToggleButton botonSeleccionado = (ToggleButton) toggle;
-        String tipoValidacion = botonSeleccionado.getText();
+        String tipoValidacion = ((ToggleButton) toggle).getText();
 
-        //nuevo mike#
-        if(tipoValidacion.equals("1. MIKE#")){
-            tablaTokens.setVisible(true);
-            txtAreaResultado.setVisible(false);
-            try {
-                lexicoMike(texto);
-            } catch (Exception e) {
-                mostrarAlerta("Error", "Error en el analizador léxico: " + e.getMessage());
-            }
-            return;
-        } else {
-            tablaTokens.setVisible(false);
-            txtAreaResultado.setVisible(true);
-        }
-        //separamos el texto usando espacios o saltos de línea como delimitador, \\s+ significa uno o más espacios, tabuladores o saltos de línea
-        //StringBuilder es mutable, String es inmutable. Nos ayauda con el metodo append, para hacer cadenas modificables
-        String[] palabras = texto.split("\\s+");
-        StringBuilder resultados = new StringBuilder();
+        try {
+            switch (tipoValidacion) {
+                case "1. MIKE#":
+                    prepararInterfazParaTabla();
+                    lexicoMike(texto);
+                    break;
 
-        for(String palabra : palabras){
-            if (!palabra.trim().isEmpty()){
-                try{
-                    switch (tipoValidacion){
-                        case "1. MIKE#":
-                            lexicoMike(palabra);
-                            break;
-                        default:
-                            throw new Exception("Opción no reconocida");
-                    }
-                    //identificadorValido(palabra);
-                    resultados.append(palabra).append(" ----------> [VALIDO]\n");
-                }catch (Exception exception){
-                    resultados.append(palabra).append(" ----------> [INVALIDO]\n");
-                }
+                case "2. BOOLEAN":
+                    prepararInterfazParaTexto();
+                    procesarLineasBooleanas(texto);
+                    break;
+                default:
+                    mostrarAlerta("Aviso", "Programa en construcción...");
+                    break;
             }
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Ocurrió un problema: " + e.getMessage());
         }
-        txtAreaResultado.setText(resultados.toString());
+    }
+
+    private String sintacticoBoolean(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoBooleano lexicoBool = new LexicoBooleano(rd);
+        SintacticoBooleano sintactico = new SintacticoBooleano(lexicoBool);
+
+        return sintactico.evaluar();
     }
 
     private void lexicoMike(String cadena) throws Exception{
@@ -146,6 +135,23 @@ public class InicioController implements Initializable {
         } while (resultado != null);
 
         tablaTokens.setItems(listaTokens);
+    }
+
+    private void procesarLineasBooleanas(String texto) {
+        String[] lineas = texto.split("\\r?\\n");
+        StringBuilder resultados = new StringBuilder();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                try {
+                    String veredicto = sintacticoBoolean(linea); // Tu método que ya devuelve un String
+                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                } catch (Exception e) {
+                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                }
+            }
+        }
+        txtAreaResultado.setText(resultados.toString());
     }
 
     @FXML
@@ -317,5 +323,14 @@ public class InicioController implements Initializable {
         alerta.showAndWait();
     }
 
+    private void prepararInterfazParaTabla() {
+        tablaTokens.setVisible(true);
+        txtAreaResultado.setVisible(false);
+    }
+
+    private void prepararInterfazParaTexto() {
+        tablaTokens.setVisible(false);
+        txtAreaResultado.setVisible(true);
+    }
 }
 
