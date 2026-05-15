@@ -60,6 +60,7 @@ public class InicioController implements Initializable {
 
         infoAutomatas.put("1. MIKE#", new String[]{"Analizador Léxico Mike#", "Desglosa el código fuente en tokens."});
         infoAutomatas.put("2. BOOLEAN", new String[]{"Analizador Sintactico Booleano", ""});
+        infoAutomatas.put("3. OPERACIONES", new String[]{"Analizador Sintactico de Operaciones", ""});
     }
 
 
@@ -91,6 +92,9 @@ public class InicioController implements Initializable {
                     prepararInterfazParaTexto();
                     procesarLineasBooleanas(texto);
                     break;
+                case "3. OPERACIONES":
+                    prepararInterfazParaTexto();
+                    procesarLineasOperaciones(texto);
                 default:
                     mostrarAlerta("Aviso", "Programa en construcción...");
                     break;
@@ -98,14 +102,6 @@ public class InicioController implements Initializable {
         } catch (Exception e) {
             mostrarAlerta("Error", "Ocurrió un problema: " + e.getMessage());
         }
-    }
-
-    private String sintacticoBoolean(String cadena) throws Exception {
-        Reader rd = new BufferedReader(new StringReader(cadena));
-        LexicoBooleano lexicoBool = new LexicoBooleano(rd);
-        SintacticoBooleano sintactico = new SintacticoBooleano(lexicoBool);
-
-        return sintactico.evaluar();
     }
 
     private void lexicoMike(String cadena) throws Exception{
@@ -137,6 +133,14 @@ public class InicioController implements Initializable {
         tablaTokens.setItems(listaTokens);
     }
 
+    private String sintacticoBoolean(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoBooleano lexicoBool = new LexicoBooleano(rd);
+        SintacticoBooleano sintactico = new SintacticoBooleano(lexicoBool);
+
+        return sintactico.evaluar();
+    }
+
     private void procesarLineasBooleanas(String texto) {
         String[] lineas = texto.split("\\r?\\n");
         StringBuilder resultados = new StringBuilder();
@@ -144,7 +148,32 @@ public class InicioController implements Initializable {
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 try {
-                    String veredicto = sintacticoBoolean(linea); // Tu método que ya devuelve un String
+                    String veredicto = sintacticoBoolean(linea);
+                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                } catch (Exception e) {
+                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                }
+            }
+        }
+        txtAreaResultado.setText(resultados.toString());
+    }
+
+    private String sintacticoOperaciones(String cadena) throws Exception {
+        Reader rd = new BufferedReader(new StringReader(cadena));
+        LexicoOperaciones lexicoOperaciones = new LexicoOperaciones(rd);
+        SintacticoOperaciones sintactico  = new SintacticoOperaciones(lexicoOperaciones);
+
+        return sintactico.analizar();
+    }
+
+    private void procesarLineasOperaciones(String texto){
+        String[] lineas = texto.split("\\r?\\n");
+        StringBuilder resultados = new StringBuilder();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                try {
+                    String veredicto = sintacticoOperaciones(linea);
                     resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
                 } catch (Exception e) {
                     resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");

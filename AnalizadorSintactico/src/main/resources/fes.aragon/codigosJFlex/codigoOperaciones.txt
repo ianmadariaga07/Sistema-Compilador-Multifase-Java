@@ -1,0 +1,49 @@
+package fes.aragon.modelo;
+import fes.aragon.token.TokensOperaciones;
+
+%%
+%class LexicoOperaciones
+%public
+%line
+%column
+%type TokensOperaciones
+
+espacio=[ \t\r\n]+
+id=[a-zA-Z_][a-zA-Z0-9_]*
+num=[0-9]+
+
+%{
+    public String lexema;
+    public int getYyline(){ return yyline+1; }
+    public int getYycolumn(){ return yycolumn+1; }
+%}
+
+%%
+{espacio} {/* Ignorar */}
+
+"+"         { lexema=yytext(); return TokensV1.MAS; }
+"-"         { lexema=yytext(); return TokensV1.MENOS; }
+"*"         { lexema=yytext(); return TokensV1.POR; }
+"/"         { lexema=yytext(); return TokensV1.DIV; }
+"MOD"       { lexema=yytext(); return TokensV1.MOD; }
+"DIV"       { lexema=yytext(); return TokensV1.DIV_ENT; }
+
+"AND"       { lexema=yytext(); return TokensV1.AND; }
+"OR"        { lexema=yytext(); return TokensV1.OR; }
+"NOT"       { lexema=yytext(); return TokensV1.NOT; }
+
+"="         { lexema=yytext(); return TokensV1.IGUAL; }
+"<>"        { lexema=yytext(); return TokensV1.DIST; }
+"<"         { lexema=yytext(); return TokensV1.ME; }
+"<="        { lexema=yytext(); return TokensV1.MEI; }
+">"         { lexema=yytext(); return TokensV1.MA; }
+">="        { lexema=yytext(); return TokensV1.MAI; }
+
+"("         { lexema=yytext(); return TokensV1.AB_PAR; }
+")"         { lexema=yytext(); return TokensV1.CE_PAR; }
+";"         { lexema=yytext(); return TokensV1.PUNTOYCOMA; }
+
+{id}        { lexema=yytext(); return TokensV1.ID; }
+{num}       { lexema=yytext(); return TokensV1.NUM; }
+
+.           { lexema=yytext(); return TokensV1.ERROR; }

@@ -69,7 +69,7 @@
                   <Font size="14.0" />
                </font>
             </ToggleButton>
-            <ToggleButton layoutX="274.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="3. ID v1" toggleGroup="$grupoAFD">
+            <ToggleButton layoutX="274.0" layoutY="144.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="120.0" stylesheets="@../css/style.css" text="3. OPERACIONES" toggleGroup="$grupoAFD">
                <font>
                   <Font size="14.0" />
                </font>

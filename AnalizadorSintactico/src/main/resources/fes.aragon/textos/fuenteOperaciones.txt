@@ -1,0 +1,12 @@
+a + 5 ;
+x + y * z ;
+( x + y ) * z ;
+NOT ( a = b ) OR ( c MOD 2 <> 0 ) ;
+costo DIV 2 + 100 ;
+( NOT bandera ) AND ( vidas > 0 ) ;
+a + 5
+a > 5 AND b <= 10 ;
+( a + 5 * 2 ;
+a + * b ;
+> 5 ;
+NOT ( a = ) ;
