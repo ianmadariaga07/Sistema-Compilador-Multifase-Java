@@ -1,21 +1,22 @@
-package fes.aragon.modelo;
+package fes.aragon.sintactico;
 
-import fes.aragon.token.TokensBooleanoCup;
+import fes.aragon.lexico.LexicoBooleanoAPrima;
+import fes.aragon.token.TokensBooleanoAPrima;
 import java.io.IOException;
 
-public class SintacticoBooleanoCup {
-    private LexicoBooleanoCup lexico;
-    private TokensBooleanoCup token;
+public class SintacticoBooleanoAPrima {
+    private LexicoBooleanoAPrima lexico;
+    private TokensBooleanoAPrima token;
     private boolean hayError = false;
     private StringBuilder errorLog = new StringBuilder();
 
-    public SintacticoBooleanoCup(LexicoBooleanoCup lexico) {
+    public SintacticoBooleanoAPrima(LexicoBooleanoAPrima lexico) {
         this.lexico = lexico;
     }
 
     private void get_token() throws IOException {
         token = lexico.yylex();
-        if (token == null) token = TokensBooleanoCup.EOF;
+        if (token == null) token = TokensBooleanoAPrima.EOF;
     }
 
     public String analizar() throws IOException {
@@ -32,61 +33,61 @@ public class SintacticoBooleanoCup {
     }
 
     private void secuencia() throws IOException {
+        System.out.println("EJECUTANDO LA NUEVA VERSIÓN ESTRICTA...");
         do {
             E();
-            if (token == TokensBooleanoCup.PUNTOYCOMA) {
-                get_token();
-            } else if (token != TokensBooleanoCup.EOF) {
-                error("Se esperaba ';' al final de la expresión");
-                // Freno para evitar bucles si falta el ;
-                if(token == TokensBooleanoCup.EOF) return;
+            if (token != TokensBooleanoAPrima.PUNTOYCOMA) {
+                error("Falta el punto y coma ';' al final de la expresión");
+                if (token == TokensBooleanoAPrima.EOF) {
+                    return;
+                }
+            }else{
                 get_token();
             }
-        } while (token != TokensBooleanoCup.EOF && !hayError);
+        } while (token != TokensBooleanoAPrima.EOF && !hayError);
     }
 
-    // E ::= T E'
     private void E() throws IOException {
         T();
         E_prima();
     }
 
-    // E' ::= or T E' | lambda
+    //E' ::= or T E' | lambda
     private void E_prima() throws IOException {
-        if (token == TokensBooleanoCup.OR) {
+        if (token == TokensBooleanoAPrima.OR) {
             get_token();
             T();
             E_prima();
         }
-        // Caso lambda: no se hace nada
+        //caso lambda no se hace nada
     }
 
-    // T ::= F T'
+    //T ::= F T'
     private void T() throws IOException {
         F();
         T_prima();
     }
 
-    // T' ::= and F T' | lambda
+    //T' ::= and F T' | lambda
     private void T_prima() throws IOException {
-        if (token == TokensBooleanoCup.AND) {
+        if (token == TokensBooleanoAPrima.AND) {
             get_token();
             F();
             T_prima();
         }
     }
 
-    // F ::= not E | true | false | ( E )
+    //F ::= not E | true | false | ( E )
     private void F() throws IOException {
-        if (token == TokensBooleanoCup.NOT) {
+        if (token == TokensBooleanoAPrima.NOT) {
             get_token();
             E();
-        } else if (token == TokensBooleanoCup.TRUE || token == TokensBooleanoCup.FALSE) {
+        } else if (token == TokensBooleanoAPrima.TRUE || token == TokensBooleanoAPrima.FALSE) {
             get_token();
-        } else if (token == TokensBooleanoCup.AB_PAR) {
+        } else if (token == TokensBooleanoAPrima.AB_PAR) {
             get_token();
             E();
-            if (token == TokensBooleanoCup.CE_PAR) {
+            if (token == TokensBooleanoAPrima.CE_PAR) {
                 get_token();
             } else {
                 error("Se esperaba paréntesis de cierre ')'");

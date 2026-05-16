@@ -1,0 +1,28 @@
+package fes.aragon.lexico;
+import fes.aragon.token.TokensASDP;
+
+%%
+%class LexicoASDP
+%public
+%line
+%column
+%type TokensASDP
+
+espacio=[ \t\r\n]+
+
+%{
+    public String lexema;
+    public int getYyline(){ return yyline+1; }
+    public int getYycolumn(){ return yycolumn+1; }
+%}
+
+%%
+{espacio} {/* Ignorar */}
+
+"a"         { lexema=yytext(); return TokensASDP.A_MINUSCULA; }
+"b"         { lexema=yytext(); return TokensASDP.B_MINUSCULA; }
+"c"         { lexema=yytext(); return TokensASDP.C_MINUSCULA; }
+"d"         { lexema=yytext(); return TokensASDP.D_MINUSCULA; }
+";"         { lexema=yytext(); return TokensASDP.PUNTOYCOMA; }
+
+.           { lexema=yytext(); return TokensASDP.ERROR; }

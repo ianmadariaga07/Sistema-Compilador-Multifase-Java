@@ -1,7 +1,6 @@
 package fes.aragon.token;
 
 public enum TokensASDP {
-    OR, AND, NOT, TRUE, FALSE,
-    AB_PAR, CE_PAR, PUNTOYCOMA,
-    EOF, ERROR
+    A_MINUSCULA, B_MINUSCULA, C_MINUSCULA, D_MINUSCULA,
+    PUNTOYCOMA, EOF, ERROR
 }

@@ -137,6 +137,13 @@
                   <TableColumn fx:id="colColumna" minWidth="0.0" prefWidth="115.0" text="COLUMNA" />
               </columns>
             </TableView>
+            <TableView fx:id="tablaASDP" layoutX="15.0" layoutY="271.0" prefHeight="522.0" prefWidth="1106.0" style="-fx-background-color: #454A5E; -fx-control-inner-background: #454A5E; -fx-text-fill: #F0F1F4;">
+               <columns>
+                  <TableColumn fx:id="colPila" prefWidth="296.0" text="PILA DE SIMBOLOS" />
+                  <TableColumn fx:id="colEntrada" minWidth="0.0" prefWidth="509.0" text="ENTRADA" />
+                  <TableColumn fx:id="colAccion" minWidth="0.0" prefWidth="300.0" text="REGLA O ACCION" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </center>

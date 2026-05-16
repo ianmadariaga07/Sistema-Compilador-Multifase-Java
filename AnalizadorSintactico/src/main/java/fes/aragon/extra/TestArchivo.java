@@ -1,6 +1,6 @@
 package fes.aragon.extra;
 
-import fes.aragon.modelo.LexicoMike;
+import fes.aragon.lexico.LexicoMike;
 import fes.aragon.token.TokensMike;
 
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.Reader;
 public class TestArchivo {
     public static void main(String[] args) {
         try{
-            Reader rd=new BufferedReader(new FileReader("src/main/resources/fes.aragon/textos/FuenteMike#.txt"));
+            Reader rd=new BufferedReader(new FileReader("src/main/resources/fes.aragon/textos/fuenteMike#.txt"));
             LexicoMike lexico=new LexicoMike(rd);
             TokensMike resultado;
             do {

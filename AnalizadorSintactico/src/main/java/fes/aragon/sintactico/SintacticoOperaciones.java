@@ -1,5 +1,6 @@
-package fes.aragon.modelo;
+package fes.aragon.sintactico;
 
+import fes.aragon.lexico.LexicoOperaciones;
 import fes.aragon.token.TokensOperaciones;
 import java.io.IOException;
 

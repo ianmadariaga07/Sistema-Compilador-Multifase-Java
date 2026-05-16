@@ -1,4 +1,4 @@
-package fes.aragon.modelo;
+package fes.aragon.lexico;
 
 %%
 %class LexicoBooleano

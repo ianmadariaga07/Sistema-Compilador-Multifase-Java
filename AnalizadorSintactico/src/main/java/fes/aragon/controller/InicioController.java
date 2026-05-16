@@ -1,6 +1,8 @@
 package fes.aragon.controller;
 
+import fes.aragon.lexico.*;
 import fes.aragon.modelo.*;
+import fes.aragon.sintactico.*;
 import fes.aragon.token.TokensMike;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -42,6 +45,11 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<TokenModelo, Integer> colLinea;
     @FXML private TableColumn<TokenModelo, Integer> colColumna;
 
+    @FXML private TableView<PasoASDP> tablaASDP;
+    @FXML private TableColumn<PasoASDP, String> colPila;
+    @FXML private TableColumn<PasoASDP, String> colEntrada;
+    @FXML private TableColumn<PasoASDP, String> colAccion;
+
     private File archivoAbierto;
 
     @Override
@@ -52,6 +60,11 @@ public class InicioController implements Initializable {
         colLexema.setCellValueFactory(new PropertyValueFactory<>("lexema"));
         colLinea.setCellValueFactory(new PropertyValueFactory<>("linea"));
         colColumna.setCellValueFactory(new PropertyValueFactory<>("columna"));
+
+        colPila.setCellValueFactory(new PropertyValueFactory<>("pila"));
+        colEntrada.setCellValueFactory(new PropertyValueFactory<>("entrada"));
+        colAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
+        tablaASDP.setVisible(false);
 
         tablaTokens.setVisible(false);
     }
@@ -94,7 +107,7 @@ public class InicioController implements Initializable {
                     procesarLineasBooleanasAPrima(texto);
                     break;
                 case "5. ASDP":
-                    prepararInterfazParaTexto();
+                    prepararInterfazParaASDP();
                     procesarLineasASDP(texto);
                     break;
                 case "6. BOOLEAN CUP":
@@ -214,35 +227,31 @@ public class InicioController implements Initializable {
         txtAreaResultado.setText(resultados.toString());
     }
 
-
-
-
-
-
-
-    private String sintacticoASDP(String cadena) throws Exception {
-        Reader rd = new BufferedReader(new StringReader(cadena));
-        LexicoBooleanoAPrima lexicoBool = new LexicoBooleanoAPrima(rd);
-        SintacticoBooleanoAPrima sintactico = new SintacticoBooleanoAPrima(lexicoBool);
-
-        return sintactico.analizar();
-    }
-
     private void procesarLineasASDP(String texto) {
         String[] lineas = texto.split("\\r?\\n");
-        StringBuilder resultados = new StringBuilder();
+        ObservableList<PasoASDP> todosLosPasos = FXCollections.observableArrayList();
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 try {
-                    String veredicto = sintacticoASDP(linea);
-                    resultados.append(linea).append(" -----> ").append(veredicto).append("\n");
+                    Reader rd = new BufferedReader(new StringReader(linea));
+                    LexicoASDP lexico = new LexicoASDP(rd);
+                    SintacticoASDP sintactico = new SintacticoASDP(lexico);
+
+                    // Ponemos un separador visual para identificar qué cadena estamos evaluando
+                    todosLosPasos.add(new PasoASDP("------", "EVALUANDO: " + linea, "------"));
+
+                    // Extraemos la lista de pasos del motor y la agregamos a la tabla
+                    List<PasoASDP> pasos = sintactico.analizar();
+                    todosLosPasos.addAll(pasos);
+
                 } catch (Exception e) {
-                    resultados.append(linea).append(" -----> Error: ").append(e.getMessage()).append("\n");
+                    todosLosPasos.add(new PasoASDP("ERROR", linea, e.getMessage()));
                 }
             }
         }
-        txtAreaResultado.setText(resultados.toString());
+        // Mostramos los datos en la interfaz
+        tablaASDP.setItems(todosLosPasos);
     }
 
 
@@ -450,11 +459,19 @@ public class InicioController implements Initializable {
     private void prepararInterfazParaTabla() {
         tablaTokens.setVisible(true);
         txtAreaResultado.setVisible(false);
+        tablaASDP.setVisible(false);
     }
 
     private void prepararInterfazParaTexto() {
         tablaTokens.setVisible(false);
         txtAreaResultado.setVisible(true);
+        tablaASDP.setVisible(false);
+    }
+
+    private void prepararInterfazParaASDP() {
+        tablaTokens.setVisible(false);
+        txtAreaResultado.setVisible(false);
+        tablaASDP.setVisible(true);
     }
 }
 

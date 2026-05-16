@@ -1,5 +1,6 @@
-package fes.aragon.modelo;
+package fes.aragon.sintactico;
 
+import fes.aragon.lexico.LexicoBooleano;
 import fes.aragon.token.TokensBooleano;
 import java.io.IOException;
 
