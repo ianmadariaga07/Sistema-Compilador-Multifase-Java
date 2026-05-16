@@ -51,6 +51,7 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<PasoASDP, String> colAccion;
 
     private File archivoAbierto;
+    private final java.util.Map<String, String[]> infoAnalizadores = new java.util.HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,6 +68,25 @@ public class InicioController implements Initializable {
         tablaASDP.setVisible(false);
 
         tablaTokens.setVisible(false);
+
+        infoAnalizadores.put("1. MIKE#", new String[]{"Analizador Léxico", "Escanea el código y lo separa en los tokens válidos del lenguaje.\n\nUso: Ingresa sentencias válidas (ej. int x = 5 ;) y presiona Validar. Se mostrará una tabla detallada con el Lexema, Tipo de Token, Línea y Columna."});
+        infoAnalizadores.put("2. BOOLEAN", new String[]{"Sintáctico Booleano (Recursivo)", "Comprueba si una expresión lógica está bien escrita basándose en métodos recursivos programados a mano.\n\nUso: Ingresa cadenas como 'true or false ;' o 'not true ;'."});
+        infoAnalizadores.put("3. OPERACIONES", new String[]{"Sintáctico Operaciones (Recursivo)", "Evalúa la sintaxis de expresiones matemáticas respetando la jerarquía de operadores (multiplicaciones antes que sumas, uso de paréntesis, etc.).\n\nUso: Ingresa operaciones como '3 + 5 * 2 ;' o '(4 - 1) / 3 ;'."});
+        infoAnalizadores.put("4. BOOLEAN APRIMA", new String[]{"Sintáctico Booleano (A-Prima)", "Versión matemática de la gramática booleana donde se eliminó la recursividad por la izquierda factorizando con la regla 'A Prima' para evitar bucles infinitos en el motor.\n\nUso: Ingresa sentencias lógicas separadas por espacios."});
+        infoAnalizadores.put("5. ASDP", new String[]{"Analizador Predictivo (LL1)", "Motor que utiliza una Pila de datos (Stack) explícita y una Tabla M (Predictiva) para derivar la gramática. Es capaz de tomar caminos vacíos (Lambda λ).\n\nUso: Ingresa las combinaciones válidas 'a b c d ;', 'a b d ;', 'b c d ;' o 'b d ;' para ver cómo se vacía la pila paso a paso en la tabla gráfica."});
+        infoAnalizadores.put("6. BOOLEAN CUP", new String[]{"Analizador Ascendente (LALR - CUP)", "Generador de parsers profesional. A diferencia de los motores anteriores, este no solo valida la gramática, sino que ejecuta la lógica y resuelve las operaciones.\n\nUso: Ingresa operaciones completas como 'not ( true and false ) ;' y el sistema evaluará y te devolverá el resultado booleano real (TRUE/FALSE)."});
+
+        grupoAFD.selectedToggleProperty().addListener((observable, viejoToggle, nuevoToggle) -> {
+            if (nuevoToggle != null) {
+                ToggleButton botonSeleccionado = (ToggleButton) nuevoToggle;
+                String textoBoton = botonSeleccionado.getText();
+
+                if (infoAnalizadores.containsKey(textoBoton)) {
+                    String[] info = infoAnalizadores.get(textoBoton);
+                    mostrarAlerta(info[0], info[1]);
+                }
+            }
+        });
     }
 
 
