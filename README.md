@@ -307,20 +307,6 @@ Para maximizar el uso eficiente del área de visualización y proporcionar un en
         ```
         Al dispararse el switch de validación, el sistema ejecuta el método correspondiente, modificando el estado de visibilidad de los nodos gráficos de forma limpia y transparente para el usuario.
 
-### Implementación del Sistema de Ayuda Mediante el Patrón Diccionario
-Con el fin de proveer asistencia inmediata y documentar la base teórica y el modo de uso de cada uno de los seis analizadores implementados, se estructuró un framework de ayuda interactiva en el método de inicialización del controlador.
-
-Para evitar un bloque condicional masivo y desordenado dentro de los eventos de la vista, se aplicó el patrón de diseño **Diccionario** utilizando colecciones basadas en mapas estructurados (`java.util.Map` y `java.util.HashMap`):
-
-1.  **Instanciación del Diccionario:**
-    ```java
-    private final java.util.Map<String, String[]> infoAnalizadores = new java.util.HashMap<>();
-    ```
-
-Esta solución separa por completo los datos textuales informativos de la lógica de control del flujo de eventos. Si en fases futuras se requiere expandir el catálogo de analizadores o refinar la teoría, las modificaciones se restringen al diccionario sin alterar la función encargada de detonar los cuadros de diálogo.
-
----
-
 ## Infraestructura de Construcción y Portabilidad (Maven & JPMS)
 
 El despliegue del proyecto descansa sobre dos pilares de configuración profunda diseñados para conciliar dependencias del año 2006 con las directivas de seguridad del SDK de Java moderno.
