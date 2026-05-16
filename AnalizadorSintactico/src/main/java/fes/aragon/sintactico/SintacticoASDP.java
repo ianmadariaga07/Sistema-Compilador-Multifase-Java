@@ -45,7 +45,6 @@ public class SintacticoASDP {
             entrada.add(new ElementoEntrada(t, lexico.lexema));
             t = lexico.yylex();
         }
-        // Agregamos un token de fin de archivo en lugar de regalar el punto y coma
         entrada.add(new ElementoEntrada(TokensASDP.EOF, ""));
 
         Stack<String> pila = new Stack<>();
@@ -72,7 +71,7 @@ public class SintacticoASDP {
                     }
                 } else {
                     pasos.add(new PasoASDP(strPila, strEntrada, "Error: Se esperaba '" + cimaPila + "'"));
-                    break; // Cortamos la ejecución al primer error
+                    break;
                 }
             } else {
                 int fila = obtenerFila(cimaPila);

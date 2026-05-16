@@ -1,0 +1,37 @@
+package fes.aragon.lexico;
+import java_cup.runtime.Symbol;
+import fes.aragon.sintactico.symBooleanoCup; // Clase que generará CUP automáticamente
+
+%%
+%class LexicoBooleanoCup
+%public
+%line
+%column
+%cup
+%ignorecase
+
+espacio=[ \t\r\n]+
+
+%{
+    // Métodos auxiliares para crear los Símbolos que CUP entiende
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn, yytext());
+    }
+%}
+
+%%
+{espacio} { /* Ignorar */ }
+
+"or"      { return symbol(symBooleanoCup.OR); }
+"and"     { return symbol(symBooleanoCup.AND); }
+"not"     { return symbol(symBooleanoCup.NOT); }
+"true"    { return symbol(symBooleanoCup.TRUE, true); }
+"false"   { return symbol(symBooleanoCup.FALSE, false); }
+"("       { return symbol(symBooleanoCup.LPAREN); }
+")"       { return symbol(symBooleanoCup.RPAREN); }
+";"       { return symbol(symBooleanoCup.PUNTOYCOMA); }
+
+.         { return symbol(symBooleanoCup.error, yytext()); }

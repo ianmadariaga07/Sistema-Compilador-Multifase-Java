@@ -237,11 +237,7 @@ public class InicioController implements Initializable {
                     Reader rd = new BufferedReader(new StringReader(linea));
                     LexicoASDP lexico = new LexicoASDP(rd);
                     SintacticoASDP sintactico = new SintacticoASDP(lexico);
-
-                    // Ponemos un separador visual para identificar qué cadena estamos evaluando
                     todosLosPasos.add(new PasoASDP("------", "EVALUANDO: " + linea, "------"));
-
-                    // Extraemos la lista de pasos del motor y la agregamos a la tabla
                     List<PasoASDP> pasos = sintactico.analizar();
                     todosLosPasos.addAll(pasos);
 
@@ -250,23 +246,24 @@ public class InicioController implements Initializable {
                 }
             }
         }
-        // Mostramos los datos en la interfaz
         tablaASDP.setItems(todosLosPasos);
     }
-
-
-
-
-
-
-
 
     private String sintacticoBooleanCup(String cadena) throws Exception {
         Reader rd = new BufferedReader(new StringReader(cadena));
         LexicoBooleanoCup lexicoBool = new LexicoBooleanoCup(rd);
         SintacticoBooleanoCup sintactico = new SintacticoBooleanoCup(lexicoBool);
 
-        return sintactico.analizar();
+        try {
+            sintactico.parse();
+
+            if (sintactico.resultadoFinal == null || sintactico.resultadoFinal.isEmpty()) {
+                return "Error: Cadena no válida para evaluación LALR.";
+            }
+            return sintactico.resultadoFinal;
+        } catch (Exception e) {
+            return sintactico.resultadoFinal.isEmpty() ? "Error fatal de sintaxis." : sintactico.resultadoFinal;
+        }
     }
 
     private void procesarLineasBooleanasCup(String texto) {
@@ -285,7 +282,6 @@ public class InicioController implements Initializable {
         }
         txtAreaResultado.setText(resultados.toString());
     }
-
 
     @FXML
     void accionAbrirArchivo(ActionEvent event){

@@ -33,7 +33,7 @@ public class SintacticoBooleanoAPrima {
     }
 
     private void secuencia() throws IOException {
-        System.out.println("EJECUTANDO LA NUEVA VERSIÓN ESTRICTA...");
+        System.out.println("EJECUTANDO LA NUEVA VERSION");
         do {
             E();
             if (token != TokensBooleanoAPrima.PUNTOYCOMA) {

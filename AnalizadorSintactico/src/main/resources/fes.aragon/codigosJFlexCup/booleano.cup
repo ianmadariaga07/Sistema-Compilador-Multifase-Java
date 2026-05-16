@@ -1,0 +1,50 @@
+package fes.aragon.sintactico;
+import java_cup.runtime.*;
+
+parser code {:
+    // Variable global para guardar el resultado y mandarlo a tu interfaz
+    public String resultadoFinal = "";
+
+    @Override
+    public void syntax_error(Symbol s) {
+        resultadoFinal = "Error sintáctico: No se esperaba el token '" + s.value + "' en la línea " + (s.left + 1) + " columna " + (s.right + 1);
+    }
+
+    @Override
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+        resultadoFinal = "Error fatal: Expresión incorrecta.";
+    }
+:};
+
+/* Terminales (Tokens que vienen del Lexer) */
+terminal PUNTOYCOMA, OR, AND, NOT, LPAREN, RPAREN;
+terminal Boolean TRUE, FALSE;
+
+/* No Terminales (Reglas de la gramática) */
+non terminal expr_lista, expr_parte;
+non terminal Boolean expr;
+
+/* Precedencia de operadores (De menor a mayor importancia) */
+precedence left OR;
+precedence left AND;
+precedence right NOT;
+
+/* Gramática y Lógica LALR */
+expr_lista ::= expr_lista expr_parte
+             | expr_parte ;
+
+expr_parte ::= expr:e PUNTOYCOMA
+             {:
+                parser.resultadoFinal = "Análisis LALR Exitoso. Resultado evaluado: " + e.toString().toUpperCase();
+             :}
+             | error PUNTOYCOMA
+             {:
+                // Permite al compilador recuperarse si hay un error y encuentra un punto y coma
+             :};
+
+expr ::= expr:e1 OR expr:e2   {: RESULT = e1 || e2; :}
+       | expr:e1 AND expr:e2  {: RESULT = e1 && e2; :}
+       | NOT expr:e           {: RESULT = !e; :}
+       | TRUE:t               {: RESULT = t; :}
+       | FALSE:f              {: RESULT = f; :}
+       | LPAREN expr:e RPAREN {: RESULT = e; :};

@@ -42,6 +42,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>java_cup</groupId>
+            <artifactId>java_cup</artifactId>
+            <version>11a</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/jar/java-cup-11.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
