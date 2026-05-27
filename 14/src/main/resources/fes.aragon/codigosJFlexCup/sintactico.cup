@@ -8,7 +8,7 @@ parser code {:
     public ArrayList<Comando> listaComandos = new ArrayList<>();
 
     public void syntax_error(Symbol s) {
-        String lexema = (s.value != null) ? s.value.toString() : "Token inesperado";
+        String lexema = (s.value != null) ? s.value.toString() : "Fin de archivo / Token inesperado";
         throw new RuntimeException("Error en Línea " + s.left + ", Columna " + s.right + " | No se esperaba: '" + lexema + "'");
     }
 
@@ -22,11 +22,12 @@ terminal String NUMERO, ID;
 
 non terminal programa, lista_instrucciones, instruccion;
 
-programa ::= lista_instrucciones ;
+programa ::= lista_instrucciones FIN {: parser.listaComandos.add(new Comando("fin")); :} ;
 
 lista_instrucciones ::= lista_instrucciones instruccion
                       | instruccion ;
 
+// Sacamos a FIN de esta lista
 instruccion ::= INICIO NUMERO:x NUMERO:y {: parser.listaComandos.add(new Comando("inicio", Integer.parseInt(x), Integer.parseInt(y))); :}
               | DERECHA {: parser.listaComandos.add(new Comando("derecha")); :}
               | IZQUIERDA {: parser.listaComandos.add(new Comando("izquierda")); :}
@@ -35,5 +36,4 @@ instruccion ::= INICIO NUMERO:x NUMERO:y {: parser.listaComandos.add(new Comando
               | MOVER NUMERO:n {: parser.listaComandos.add(new Comando("mover", Integer.parseInt(n))); :}
               | ID:id ASIGNACION NUMERO:v {: parser.listaComandos.add(new Comando("asignacion_" + id, Integer.parseInt(v))); :}
               | REPITE {: parser.listaComandos.add(new Comando("repite")); :} lista_instrucciones HASTA ID:id ASIGNACION NUMERO:limite {: parser.listaComandos.add(new Comando("hasta_" + id, Integer.parseInt(limite))); :}
-              | FIN {: parser.listaComandos.add(new Comando("fin")); :}
               ;

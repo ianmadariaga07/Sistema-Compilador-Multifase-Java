@@ -166,6 +166,7 @@ public class InicioController implements Initializable {
                 "- repite (Abre un bloque iterativo)\n" +
                 "- hasta ID = N (Condición de cierre del bloque iterativo)\n" +
                 "- fin (Concluye el programa)\n\n" +
+                "NOTA: LAS PALABRAS RESERVADAS SOLO SON ADMITIDAS EN MINUSCULAS\n\n" +
                 "Ejemplo de uso:\n" +
                 "inicio 5 5\n" +
                 "a = 1\n" +
@@ -175,7 +176,8 @@ public class InicioController implements Initializable {
                 "  abajo\n" +
                 "  mover 2\n" +
                 "hasta a = 4\n" +
-                "fin";
+                "fin\n\n" +
+                "El archivo de ejemplo llamado 'salida.fes' se encuentra en la raiz del proyecto";
         mostrarAlerta("Instrucciones del Intérprete", info);
     }
 

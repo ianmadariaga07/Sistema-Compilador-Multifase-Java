@@ -2,7 +2,7 @@ inicio 1 1
 abajo 
 mover 3
 a = 1
-repite 
+repite
 	derecha 
 	mover 5
 	abajo
