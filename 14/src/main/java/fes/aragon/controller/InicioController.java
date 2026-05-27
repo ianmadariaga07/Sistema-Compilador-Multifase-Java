@@ -201,8 +201,12 @@ public class InicioController implements Initializable {
 
             animacionActual.play();
 
+        } catch (RuntimeException ex) {
+            //atrapa los errores con coordenadas de CUP
+            consola.setText("Consola: " + ex.getMessage());
+            consola.setStyle("-fx-font-weight: bold; -fx-text-fill: #ff6b6b; -fx-font-size: 14;");
         } catch (Exception ex) {
-            consola.setText("Consola: Error de sintaxis detectado. Revisa las instrucciones en el editor.");
+            consola.setText("Consola: Error estructural. Revisa las instrucciones en el editor.");
             consola.setStyle("-fx-font-weight: bold; -fx-text-fill: #ff6b6b; -fx-font-size: 14;");
         }
     }
