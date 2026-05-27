@@ -37,3 +37,43 @@
 .tool-bar {
     -fx-background-color: #0B0C0F;
 }
+
+.keyword-cmd {
+    -fx-fill: #b19cd9;
+    -fx-font-weight: bold;
+}
+
+.keyword-loop {
+    -fx-fill: #f7768e;
+    -fx-font-weight: bold;
+}
+
+.keyword-block {
+    -fx-fill: #7dcfff;
+    -fx-font-weight: bold;
+}
+
+.number {
+    -fx-fill: #f5a623;
+}
+
+.variable {
+    -fx-fill: #5bc0de;
+}
+
+/* Integración limpia de la barra de números (Estilo IntelliJ) */
+.lineno {
+    -fx-background-color: #454A5E; /* Mismo color exacto que el editor */
+    -fx-text-fill: #6a7382; /* Gris apagado para que no resalte más que el código */
+    -fx-font-family: monospace;
+    -fx-font-size: 16;
+    -fx-padding: 0 10 0 5;
+    -fx-border-color: transparent #323543 transparent transparent; /* Línea divisoria sutil */
+    -fx-border-width: 0 2 0 0;
+}
+
+.styled-text-area {
+    -fx-font-family: monospace;
+    -fx-font-size: 16;
+    -fx-background-color: #454A5E;
+}

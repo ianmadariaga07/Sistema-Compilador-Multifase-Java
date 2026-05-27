@@ -10,8 +10,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,8 +27,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InicioController implements Initializable {
 
@@ -33,20 +44,48 @@ public class InicioController implements Initializable {
     @FXML private Button idLimpiar;
     @FXML private Button idQuitar;
     @FXML private Label lblEstado;
-    @FXML private TextArea txtAreaContenido;
+    @FXML private StackPane contenedorEditor;
 
     @FXML private Canvas hoja;
     @FXML private ImageView nave;
     @FXML private Label consola;
     @FXML private ToggleButton btnVelocidad;
 
+    private CodeArea txtAreaContenido;
     private File archivoAbierto;
     private Image imgDerecha, imgIzquierda, imgArriba, imgAbajo;
     private SequentialTransition animacionActual;
 
+    private static final String[] KEYWORDS_CMD = new String[] { "derecha", "izquierda", "arriba", "abajo", "mover" };
+    private static final String[] KEYWORDS_LOOP = new String[] { "repite", "hasta" };
+    private static final String[] KEYWORDS_BLOCK = new String[] { "inicio", "fin" };
+
+    private static final String KEYWORD_CMD_PATTERN = "\\b(" + String.join("|", KEYWORDS_CMD) + ")\\b";
+    private static final String KEYWORD_LOOP_PATTERN = "\\b(" + String.join("|", KEYWORDS_LOOP) + ")\\b";
+    private static final String KEYWORD_BLOCK_PATTERN = "\\b(" + String.join("|", KEYWORDS_BLOCK) + ")\\b";
+    private static final String NUMBER_PATTERN = "\\b\\d+\\b";
+    private static final String VARIABLE_PATTERN = "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b";
+
+    private static final Pattern PATTERN = Pattern.compile(
+            "(?<CMD>" + KEYWORD_CMD_PATTERN + ")"
+                    + "|(?<LOOP>" + KEYWORD_LOOP_PATTERN + ")"
+                    + "|(?<BLOCK>" + KEYWORD_BLOCK_PATTERN + ")"
+                    + "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+                    + "|(?<VARIABLE>" + VARIABLE_PATTERN + ")"
+    );
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarBotones(false);
+
+        txtAreaContenido = new CodeArea();
+        txtAreaContenido.setParagraphGraphicFactory(LineNumberFactory.get(txtAreaContenido));
+        txtAreaContenido.textProperty().addListener((obs, oldText, newText) -> {
+            txtAreaContenido.setStyleSpans(0, computeHighlighting(newText));
+        });
+
+        VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(txtAreaContenido);
+        contenedorEditor.getChildren().add(scrollPane);
 
         Fondo fondo = new Fondo();
         fondo.pintar(hoja.getGraphicsContext2D());
@@ -61,6 +100,45 @@ public class InicioController implements Initializable {
         nave.setFitHeight(30);
         nave.setX(0);
         nave.setY(0);
+    }
+
+    private StyleSpans<Collection<String>> computeHighlighting(String text) {
+        Matcher matcher = PATTERN.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        while (matcher.find()) {
+            String styleClass =
+                    matcher.group("CMD") != null ? "keyword-cmd" :
+                            matcher.group("LOOP") != null ? "keyword-loop" :
+                                    matcher.group("BLOCK") != null ? "keyword-block" :
+                                            matcher.group("NUMBER") != null ? "number" :
+                                                    matcher.group("VARIABLE") != null ? "variable" :
+                                                            null;
+            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+            if (styleClass != null) {
+                spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            }
+            lastKwEnd = matcher.end();
+        }
+        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
+    }
+
+    private void limpiarTablero() {
+        hoja.getGraphicsContext2D().clearRect(0, 0, hoja.getWidth(), hoja.getHeight());
+        Fondo fondo = new Fondo();
+        fondo.pintar(hoja.getGraphicsContext2D());
+    }
+
+    @FXML
+    public void cambiarVelocidad(ActionEvent event) {
+        if (btnVelocidad.isSelected()) {
+            btnVelocidad.setText("Velocidad: x2");
+            if (animacionActual != null) animacionActual.setRate(2.0);
+        } else {
+            btnVelocidad.setText("Velocidad: x1");
+            if (animacionActual != null) animacionActual.setRate(1.0);
+        }
     }
 
     @FXML
@@ -97,7 +175,6 @@ public class InicioController implements Initializable {
         if (animacionActual != null) {
             animacionActual.stop();
         }
-
         limpiarTablero();
 
         try {
@@ -115,11 +192,13 @@ public class InicioController implements Initializable {
 
             MotorEjecucion motor = new MotorEjecucion(imgDerecha, imgIzquierda, imgArriba, imgAbajo);
             animacionActual = motor.procesar(p.listaComandos, nave, hoja);
+
             if (btnVelocidad.isSelected()) {
                 animacionActual.setRate(2.0);
             } else {
                 animacionActual.setRate(1.0);
             }
+
             animacionActual.play();
 
         } catch (Exception ex) {
@@ -137,12 +216,6 @@ public class InicioController implements Initializable {
         }
     }
 
-    private void limpiarTablero() {
-        hoja.getGraphicsContext2D().clearRect(0, 0, hoja.getWidth(), hoja.getHeight());
-        Fondo fondo = new Fondo();
-        fondo.pintar(hoja.getGraphicsContext2D());
-    }
-
     @FXML
     public void reiniciarNave(ActionEvent event) {
         if (animacionActual != null) {
@@ -154,17 +227,6 @@ public class InicioController implements Initializable {
         nave.setImage(imgDerecha);
         consola.setText("Consola: Nave reiniciada manualmente a la posición (0, 0).");
         consola.setStyle("-fx-font-weight: bold; -fx-text-fill: #5bc0de; -fx-font-size: 14;");
-    }
-
-    @FXML
-    public void cambiarVelocidad(ActionEvent event) {
-        if (btnVelocidad.isSelected()) {
-            btnVelocidad.setText("Velocidad: x2");
-            if (animacionActual != null) animacionActual.setRate(2.0);
-        } else {
-            btnVelocidad.setText("Velocidad: x1");
-            if (animacionActual != null) animacionActual.setRate(1.0);
-        }
     }
 
     @FXML
@@ -299,9 +361,9 @@ public class InicioController implements Initializable {
         try {
             Path ruta = archivo.toPath();
             String contenido = Files.readString(ruta);
-            txtAreaContenido.setText(contenido);
+            txtAreaContenido.replaceText(contenido);
         } catch (IOException e) {
-            txtAreaContenido.setText("Error al leer el archivo: " + e.getMessage());
+            txtAreaContenido.replaceText("Error al leer el archivo: " + e.getMessage());
         }
     }
 

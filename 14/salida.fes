@@ -1,14 +1,14 @@
 inicio 2 2
 a = 1
 repite
-derecha
-mover 2
-abajo 
-mover 2
-izquierda
-mover 2
-arriba 
-mover 2
+	derecha
+	mover 2
+	abajo 
+	mover 2
+	izquierda
+	mover 2
+	arriba 
+	mover 2
 hasta a = 5
 abajo 
 mover 5

@@ -66,11 +66,11 @@
         </StackPane>
     </center>
     <right>
-        <TextArea fx:id="txtAreaContenido" prefWidth="320.0" promptText="Escribe las instrucciones aquí..." style="-fx-control-inner-background: #454A5E; -fx-text-fill: #F0F1F4; -fx-prompt-text-fill: #A1A6BA; -fx-font-family: monospace; -fx-font-size: 16;" BorderPane.alignment="CENTER">
+        <StackPane fx:id="contenedorEditor" prefWidth="320.0" style="-fx-background-color: #454A5E;" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="10.0" right="10.0" top="10.0" />
             </BorderPane.margin>
-        </TextArea>
+        </StackPane>
     </right>
     <bottom>
         <VBox minHeight="120.0" prefHeight="120.0" spacing="10.0" style="-fx-background-color: #0B0C0F;" BorderPane.alignment="CENTER">

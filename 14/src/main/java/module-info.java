@@ -7,6 +7,11 @@ module fes.aragon.javafxcompiladores {
     requires java.cup;
     requires jlayer;
 
+    // --- LIBRERÍAS DEL EDITOR DE TEXTO AVANZADO ---
+    requires org.fxmisc.richtext;
+    requires org.fxmisc.flowless;
+    requires reactfx;
+
     exports fes.aragon.controller;
     opens fes.aragon.controller to javafx.fxml;
     exports fes.aragon;
