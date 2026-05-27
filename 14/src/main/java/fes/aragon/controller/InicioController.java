@@ -34,6 +34,11 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+import fes.aragon.modelo.VariableFila;
+
 public class InicioController implements Initializable {
 
     @FXML private Button idAbrir;
@@ -50,6 +55,11 @@ public class InicioController implements Initializable {
     @FXML private ImageView nave;
     @FXML private Label consola;
     @FXML private ToggleButton btnVelocidad;
+
+    @FXML private TableView<VariableFila> tablaDebugger;
+    @FXML private TableColumn<VariableFila, String> colVariable;
+    @FXML private TableColumn<VariableFila, Integer> colValor;
+    private ObservableList<VariableFila> datosDebugger;
 
     private CodeArea txtAreaContenido;
     private File archivoAbierto;
@@ -100,6 +110,11 @@ public class InicioController implements Initializable {
         nave.setFitHeight(30);
         nave.setX(0);
         nave.setY(0);
+
+        colVariable.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
+        datosDebugger = FXCollections.observableArrayList();
+        tablaDebugger.setItems(datosDebugger);
     }
 
     private StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -176,7 +191,7 @@ public class InicioController implements Initializable {
             animacionActual.stop();
         }
         limpiarTablero();
-
+        datosDebugger.clear();
         try {
             File archivo = new File("salida.fes");
             FileWriter escritor = new FileWriter(archivo);
@@ -191,7 +206,7 @@ public class InicioController implements Initializable {
             consola.setStyle("-fx-font-weight: bold; -fx-text-fill: #51cf66; -fx-font-size: 14;");
 
             MotorEjecucion motor = new MotorEjecucion(imgDerecha, imgIzquierda, imgArriba, imgAbajo);
-            animacionActual = motor.procesar(p.listaComandos, nave, hoja);
+            animacionActual = motor.procesar(p.listaComandos, nave, hoja, tablaDebugger, datosDebugger);
 
             if (btnVelocidad.isSelected()) {
                 animacionActual.setRate(2.0);

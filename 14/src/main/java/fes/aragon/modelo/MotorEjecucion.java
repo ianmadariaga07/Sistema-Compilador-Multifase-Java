@@ -3,8 +3,10 @@ package fes.aragon.modelo;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -31,7 +33,8 @@ public class MotorEjecucion {
         this.imgAbajo = ab;
     }
 
-    public SequentialTransition procesar(ArrayList<Comando> comandos, ImageView nave, Canvas hoja) {
+    public SequentialTransition procesar(ArrayList<Comando> comandos, ImageView nave, Canvas hoja,
+                                         TableView<VariableFila> tabla, ObservableList<VariableFila> datos) {
         SequentialTransition secuencia = new SequentialTransition();
         Map<String, Integer> variables = new HashMap<>();
         GraphicsContext gc = hoja.getGraphicsContext2D();
@@ -85,7 +88,13 @@ public class MotorEjecucion {
                 }
             } else if (accion.startsWith("asignacion_")) {
                 String var = accion.replace("asignacion_", "");
-                variables.put(var, c.getParametroX());
+                int val = c.getParametroX();
+                variables.put(var, val);
+
+                PauseTransition actualizador = new PauseTransition(Duration.millis(1));
+                actualizador.setOnFinished(e -> actualizarFila(var, val, datos, tabla));
+                secuencia.getChildren().add(actualizador);
+
             } else if (accion.equals("repite")) {
 
             } else if (accion.startsWith("hasta_")) {
@@ -94,7 +103,13 @@ public class MotorEjecucion {
                 int valor = variables.getOrDefault(var, 0);
 
                 if (valor < limite) {
-                    variables.put(var, valor + 1);
+                    int nuevoValor = valor + 1;
+                    variables.put(var, nuevoValor);
+
+                    PauseTransition actualizador = new PauseTransition(Duration.millis(1));
+                    actualizador.setOnFinished(e -> actualizarFila(var, nuevoValor, datos, tabla));
+                    secuencia.getChildren().add(actualizador);
+
                     int j = i;
                     while (j >= 0 && !comandos.get(j).getAccion().equals("repite")) {
                         j--;
@@ -105,5 +120,16 @@ public class MotorEjecucion {
             i++;
         }
         return secuencia;
+    }
+
+    private void actualizarFila(String nombre, int valor, ObservableList<VariableFila> datos, TableView<VariableFila> tabla) {
+        for (VariableFila fila : datos) {
+            if (fila.getNombre().equals(nombre)) {
+                fila.setValor(valor);
+                tabla.refresh();
+                return;
+            }
+        }
+        datos.add(new VariableFila(nombre, valor));
     }
 }
