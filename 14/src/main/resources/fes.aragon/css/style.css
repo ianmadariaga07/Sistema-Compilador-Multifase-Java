@@ -1,0 +1,39 @@
+.alert-info {
+    -fx-background-color: #5bc0de;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.alert-info:hover {
+    -fx-background-color: #31b0d5;
+}
+
+.alert-success {
+    -fx-background-color: #5cb85c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.alert-success:hover {
+    -fx-background-color: #449d44;
+}
+
+.alert-warning {
+    -fx-background-color: #f0ad4e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.alert-warning:hover {
+    -fx-background-color: #ec971f;
+}
+
+.alert-danger {
+    -fx-background-color: #d9534f;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.alert-danger:hover {
+    -fx-background-color: #c9302c;
+}
+
+.tool-bar {
+    -fx-background-color: #0B0C0F;
+}
