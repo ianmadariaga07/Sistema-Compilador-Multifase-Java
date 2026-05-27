@@ -35,4 +35,4 @@ Numero = {Digito}+
 {Id}        { return new Symbol(sym.ID, yyline + 1, yycolumn + 1, yytext()); }
 {WhiteSpace} { }
 
-[^]         { System.out.println("Error lexico: " + yytext() + " en linea " + (yyline+1) + " columna " + (yycolumn+1)); }
+[^] { throw new RuntimeException("Error Léxico en Línea " + (yyline+1) + ", Columna " + (yycolumn+1) + " | Símbolo no reconocido: '" + yytext() + "'"); }

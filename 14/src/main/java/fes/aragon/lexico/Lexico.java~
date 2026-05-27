@@ -3,8 +3,8 @@
 // source: src/main/resources/fes.aragon/codigosJFlexCup/lexico.jflex
 
 package fes.aragon.lexico;
-import java_cup.runtime.Symbol;
 import fes.aragon.sintactico.sym;
+import java_cup.runtime.Symbol;
 
 
 @SuppressWarnings("fallthrough")
@@ -740,7 +740,7 @@ public class Lexico implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { throw new RuntimeException("Error Léxico en Línea " + (yyline+1) + ", Columna " + (yycolumn+1) + " | Símbolo no reconocido: '" + yytext() + "'");
+            { System.out.println("Error lexico: " + yytext() + " en linea " + (yyline+1) + " columna " + (yycolumn+1));
             }
           // fall through
           case 15: break;
