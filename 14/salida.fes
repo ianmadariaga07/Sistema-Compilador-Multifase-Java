@@ -1,4 +1,4 @@
-inicio 1 1
+inicio 0 0
 abajo 
 mover 3
 a = 1
@@ -10,4 +10,15 @@ repite
 hasta a = 16
 abajo 
 mover 2
+izquierda
+mover 1
+arriba 
+mover 2
+b = 1 
+repite
+	derecha
+	mover 19
+	abajo
+	mover 1 
+hasta b = 20
 fin

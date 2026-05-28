@@ -47,6 +47,9 @@ public class MotorEjecucion {
             if (accion.equals("inicio")) {
                 x = c.getParametroX();
                 y = c.getParametroY();
+                if (x >= LIMIT || y >= LIMIT) {
+                    throw new RuntimeException("Error de Ejecución: Coordenada (" + x + ", " + y + ") fuera del límite permitido (0-19).");
+                }
                 TranslateTransition t = new TranslateTransition(Duration.millis(10), nave);
                 t.setToX(x * TAMANO_CELDA);
                 t.setToY(y * TAMANO_CELDA);
